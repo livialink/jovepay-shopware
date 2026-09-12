@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title lang="en-US">JOVEpay Gateway configuration</title>
+        <title lang="de-DE">JOVEpay Gateway Configuration</title>
+        <input-field type="bool">
+            <name>isTestnet</name>
+            <label>Is Testnet?</label>
+            <label lang="de-DE">Ist Testnet?</label>
+            <helpText>Enable Testnet mode</helpText>
+            <helpText lang="de-DE">Enable Testnet Mode</helpText>
+            <defaultValue>true</defaultValue>
+            <disabled>false</disabled>
+        </input-field>
+        <input-field type="bool">
+            <name>isDark</name>
+            <label>Is Dark Theme?</label>
+            <label lang="de-DE">Ist Dark Theme?</label>
+            <helpText>Enable Dark Theme</helpText>
+            <helpText lang="de-DE">Enable Dark Theme</helpText>
+            <defaultValue>true</defaultValue>
+            <disabled>false</disabled>
+        </input-field>
+        <input-field type="text">
+            <name>apiUrl</name>
+            <label>API URL</label>
+            <placeholder>Please enter your jovepay.com API URL</placeholder>
+            <helpText>Please enter your jovepay.com API URL</helpText>
+            <defaultValue>https://www.jovepay.com/pay/payment</defaultValue>
+            <disabled>true</disabled>
+        </input-field>
+        <input-field type="text">
+            <name>apiKey</name>
+            <label>API Key</label>
+            <placeholder>XXXXXXX-XXXXXXX-XXXXXXX-XXXXXXX</placeholder>
+            <helpText>Please enter your jovepay.com Api Key.</helpText>
+            <defaultValue>test_api_key</defaultValue>
+            <!-- <disabled>true</disabled> -->
+        </input-field>
+        <input-field type="text">
+            <name>IPNSecret</name>
+            <label>IPN Secret</label>
+            <placeholder>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</placeholder>
+            <helpText>Please enter your jovepay.com IPN Secret.</helpText>
+            <defaultValue>test_ipn_secret</defaultValue>
+            <!-- <disabled>true</disabled> -->
+        </input-field>
+    </card>
+
+    <card>
+        <title lang="en-US">Data </title>
+        <title lang="de-DE">Data </title>
+        <input-field type="bool">
+            <name>transmitCustomerData</name>
+            <label>Transmit customer data</label>
+            <label lang="de-DE">Transmit customer data</label>
+            <helpText>Transmit customer data</helpText>
+            <helpText lang="de-DE">Transmit customer data</helpText>
+            <defaultValue>true</defaultValue>
+            <!-- <disabled>true</disabled> -->
+        </input-field>
+        <input-field type="bool">
+            <name>transmitProductData</name>
+            <label>Transmit Product data</label>
+            <label lang="de-DE">Transmit Product data</label>
+            <helpText>Transmit Product data</helpText>
+            <helpText lang="de-DE">Transmit Product data</helpText>
+            <defaultValue>true</defaultValue>
+            <!-- <disabled>TRUE</disabled> -->
+        </input-field>
+    </card>
+
+    <card>
+        <title lang="en-US">Debug</title>
+        <title lang="de-DE">Debug</title>
+        <input-field type="bool">
+            <name>DebugPost</name>
+            <label>Enable Debuging</label>
+            <label lang="de-DE">Enable Debuging</label>
+            <helpText>Enable Debuging</helpText>
+            <helpText lang="de-DE">Enable Debuging</helpText>
+            <disabled>false</disabled>
+        </input-field>
+        <input-field type="text">
+            <name>DebugPostURL</name>
+            <label>Debug Post URL</label>
+            <placeholder>Please enter URL to send post request to debug.</placeholder>
+            <helpText>Please enter URL to send post request to debug.</helpText>
+            <defaultValue>test_debug_post_url</defaultValue>
+        </input-field>
+    </card>
+
+
+</config>

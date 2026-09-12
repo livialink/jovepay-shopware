@@ -1,0 +1,139 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_body_inner %}
+
+
+  {% if paymentStatus == 'cancelled' or paymentStatus == 'failed' or paymentStatus == 'refunded' or paymentStatus == 'expired' %}
+    <h2 style=" text-align: center;">
+      <svg width="199" height="199" xmlns="http://www.w3.org/2000/svg">
+        <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+        <g>
+          <title>background</title>
+          <rect fill="none" id="canvas_background" height="201" width="201" y="-1" x="-1"/>
+        </g>
+        <g>
+          <title>Layer 1</title>
+          <ellipse stroke="#ff0000" ry="85.49999" rx="85.49999" id="svg_1" cy="100.53425" cx="100" fill-opacity="null" stroke-width="24.5" fill="none"/>
+          <ellipse stroke="#000000" ry="4.78846" rx="4.01923" id="svg_7" cy="97.89964" cx="53.32693" stroke-width="0" fill="none"/>
+          <g stroke="null" id="svg_18">
+            <line stroke="#ff0000" stroke-linecap="null" stroke-linejoin="null" id="svg_15" y2="65.71117" x2="135.07421" y1="134.72656" x1="66.05882" fill-opacity="null" stroke-width="24.5" fill="none"/>
+            <ellipse stroke="#00bf5f" ry="12" rx="12.30769" id="svg_16" cy="133.89282" cx="66.92986" stroke-width="0" fill="#ff0000"/>
+            <ellipse stroke="#00bf5f" ry="12" rx="12.30769" id="svg_17" cy="66.2548" cx="134.55881" stroke-width="0" fill="#ff0000"/>
+          </g>
+          <g stroke="null" id="svg_22">
+            <line transform="rotate(-90 100.88938903808595,100.25164031982422) " stroke="#ff0000" stroke-linecap="null" stroke-linejoin="null" id="svg_19" y2="65.74394" x2="135.39709" y1="134.75933" x1="66.3817" fill-opacity="null" stroke-width="24.5" fill="none"/>
+            <ellipse transform="rotate(-90 134.56335449218753,133.88829040527344) " stroke="#00bf5f" ry="12" rx="12.30769" id="svg_20" cy="133.88829" cx="134.56335" stroke-width="0" fill="#ff0000"/>
+            <ellipse transform="rotate(-90 66.92533111572267,66.25934600830078) " stroke="#00bf5f" ry="12" rx="12.30769" id="svg_21" cy="66.25934" cx="66.92534" stroke-width="0" fill="#ff0000"/>
+          </g>
+        </g>
+      </svg>
+    </h2>
+    <h2 style=" text-align: center;">
+      payment failed
+    </h2>
+    <p style="text-align: center;">{{ message | raw }}
+    </p>
+
+    <p class="revocation-notice" style=" text-align: center;">Curent order Status is :
+      {{ paymentStatus }}</p>
+  {% else %}
+    {# <script>
+      window.onload = function () {
+        if (!window.location.hash) {
+          window.location = window.location + '#loaded';
+          window.location.reload();
+        }
+        setTimeout(function () {
+          window.location.reload();
+        }, 3000);
+      }
+    </script> #}
+        <script>
+
+      function CheckStatus() {
+         
+        // Sending and receiving data in JSON format using POST method
+        var xhr = new XMLHttpRequest();
+        var url = "{{ path('frontend.checkout.jovepay.process.check') }}";
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+           
+            var ps1 = JSON.parse(xhr.responseText).payment_status;
+            var ps2 = JSON.parse(data).paymentStatus;
+            if(ps1!=ps2){
+          console.log('Status_changed');
+          window.location.reload();
+          }
+          }
+        };
+        var data = JSON.stringify({"_sw_order": "{{ _sw_order }}", "paymentStatus": "{{ paymentStatus }}"});
+        //console.log(data._sw_order + ", " + data.paymentStatus);
+        xhr.send(data);
+      }
+
+      window.onload = function () {
+        setInterval(function() { 
+                CheckStatus()
+            }, 3000);
+     
+      }
+    </script>
+    {% if paymentStatus == 'completed' or paymentStatus == 'paid' %}
+      <h2 style=" text-align: center;">
+        <svg width="199" height="199" xmlns="http://www.w3.org/2000/svg">
+          <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+          <g>
+            <title>background</title>
+            <rect fill="none" id="canvas_background" height="201" width="201" y="-1" x="-1"/>
+          </g>
+          <g>
+            <title>Layer 1</title>
+            <ellipse stroke="#00bf5f" ry="85.49999" rx="85.49999" id="svg_1" cy="100.53425" cx="100" fill-opacity="null" stroke-width="24.5" fill="none"/>
+            <line stroke-linecap="null" stroke-linejoin="null" id="svg_5" y2="138.92976" x2="90.7032" y1="102.22656" x1="54" fill-opacity="null" stroke-opacity="null" stroke-width="24.5" stroke="#00bf5f" fill="none"/>
+            <line stroke-linecap="null" stroke-linejoin="null" id="svg_6" y2="75.71117" x2="148.01539" y1="144.72656" x1="79" fill-opacity="null" stroke-opacity="null" stroke-width="24.5" stroke="#00bf5f" fill="none"/>
+            <ellipse stroke="#000000" ry="4.78846" rx="4.01923" id="svg_7" cy="97.89964" cx="53.32693" stroke-width="0" fill="none"/>
+            <ellipse stroke="#000000" ry="12" rx="12.30769" id="svg_9" cy="102.71634" cx="54.57692" stroke-width="0" fill="#00bf5f"/>
+            <ellipse stroke="#000000" ry="12" rx="12.30769" id="svg_10" cy="76.2548" cx="147.49999" stroke-width="0" fill="#00bf5f"/>
+          </g>
+        </svg>
+      </h2>
+      <p class="revocation-notice" style=" text-align: center;">please wait redirecting.</p>
+
+    {% elseif paymentStatus == 'in_progress'   %}
+      <h2 style=" text-align: center;">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#fff;display:block;" width="200px" height="200px" viewbox="0 0 100 100" preserveaspectratio="xMidYMid">
+          <circle cx="50" cy="50" r="39" stroke="#e0e0e0" stroke-width="16" fill="none"></circle>
+          <circle cx="50" cy="50" r="39" stroke="#bebebe" stroke-width="11" stroke-linecap="round" fill="none">
+            <animatetransform attributename="transform" type="rotate" repeatcount="indefinite" dur="2.272727272727273s" values="0 50 50;180 50 50;720 50 50" keytimes="0;0.5;1"></animatetransform>
+            <animate attributename="stroke-dasharray" repeatcount="indefinite" dur="2.272727272727273s" values="24.504422698000386 220.53980428200347;122.52211349000193 122.52211349000193;24.504422698000386 220.53980428200347" keytimes="0;0.5;1"></animate>
+          </circle>
+        </svg>
+      </h2>
+      <p class="revocation-notice" style=" text-align: center;">Please wait we are confirming your order.</p>
+      <p class="revocation-notice" style=" text-align: center;">please wait redirecting.</p>
+    {% else %}
+      <h2 style=" text-align: center;">
+        <svg width="199" height="199" xmlns="http://www.w3.org/2000/svg">
+          <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+
+          <g>
+            <title>background</title>
+            <rect x="-1" y="-1" width="201" height="201" id="canvas_background" fill="none"/>
+          </g>
+          <g>
+            <title>Layer 1</title>
+            <ellipse fill="none" stroke-width="24.5" fill-opacity="null" cx="100" cy="100.53425" id="svg_1" rx="85.49999" ry="85.49999" stroke="#e8e8e8"/>
+            <ellipse fill="none" stroke-width="0" cx="53.32693" cy="97.89964" id="svg_7" rx="4.01923" ry="4.78846" stroke="#e8e8e8"/>
+            <text font-style="normal" font-weight="bold" xml:space="preserve" text-anchor="start" font-family="sans-serif" font-size="140" id="svg_2" y="153" x="57.5" stroke-width="0" stroke="#e8e8e8" fill="#cccccc">?</text>
+          </g>
+        </svg>
+      </h2>
+      <p class="revocation-notice" style=" text-align: center;">your order Status is :
+        {{ paymentStatus }}</p>
+      <p class="revocation-notice" style=" text-align: center;">Ther has been a techinical problem confirming your order.</p>
+    {% endif %}
+  {% endif %}
+
+{% endblock %}
