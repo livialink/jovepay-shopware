@@ -1,33 +1,34 @@
 {
-    "name": "swag/payment-akspayplugin",
-    "description": "Expand your payment options with JOVEpay! USDT, USDC, ETH, BNB, LTC and many more: pay with anything you like!",
-    "version": "v1.0.0",
-    "type": "shopware-platform-plugin",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "JovepayPlugin\\": "src/"
-        }
-    },
-    "authors": [{
-        "name": "JOVEpay",
-        "email": "support@jovepay.com",
-        "homepage": "https://www.jovepay.com",
-        "role": "Developer"
-    }],
-    "require": {
-        "shopware/core": "*"
-    },
-    "extra": {
-        "shopware-plugin-class": "JovepayPlugin\\JovepayPlugin",
-        "label": {
-            "de-DE": "JOVEpay",
-            "en-GB": "JOVEpay"
-        },
-        "description": {
-            "en-GB": "Expand your payment options with JOVEpay! USDT, USDC, ETH, BNB, LTC and many more: pay with anything you like!",
-            "de-DE": "x breid uw betalingsmogelijkheden uit met JOVEpay! USDT, USDC, ETH, BNB, LTC en nog veel meer: betaal met alles wat je maar wilt!"
-        }
+  "name": "jovepay/payment-jovepayplugin",
+  "description": "Accept USDT, USDC, ETH, BNB, LTC and many more: pay with anything you like!",
+  "version": "v1.0.0",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "JovepayPlugin\\": "src/"
     }
-
+  },
+  "authors": [
+    {
+      "name": "jovepay",
+      "email": "dev@jovepay.com",
+      "homepage": "https://www.jovepay.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "shopware/core": "*"
+  },
+  "extra": {
+    "shopware-plugin-class": "JovepayPlugin\\JovepayPlugin",
+    "label": {
+      "de-DE": "JOVEpay Crypto Payments",
+      "en-GB": "JOVEpay Crypto Payments"
+    },
+    "description": {
+      "en-GB": "Accept crypto payments across 13 blockchain networks and settle instantly, directly to your wallet. 0.5% flat service fee, 24/7 support, REST API and CMS plugins.",
+      "de-DE": "x breid uw betalingsmogelijkheden uit met JOVEpay! USDT, USDC, ETH, BNB, LTC en nog veel meer: betaal met alles wat je maar wilt!"
+    }
+  }
 }

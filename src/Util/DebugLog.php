@@ -1,73 +1,113 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace JovepayPlugin\Util;
 
 use Shopware\Core\System\SystemConfig\SystemConfigService;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-
-
 
 class DebugLog
 {
+    private SystemConfigService $systemConfigService;
 
-    /**
-     * @var SystemConfigService
-     */
-    private $systemConfigService;
-
-    /**
-     * @var Client
-     */
-    private $restClient;
+    /** @var object|null */
+    private $restClient = null;
 
     public function __construct(SystemConfigService $systemConfigService)
     {
         $this->systemConfigService = $systemConfigService;
-        $this->restClient = new Client();
     }
 
-
     /**
-     * @return Bool
+     * @return bool
      */
     public function send(string $origin, $data)
     {
-        if (((bool) $this->systemConfigService->get('JovepayPlugin.config.DebugPost')) && $this->systemConfigService->get('JovepayPlugin.config.DebugPostURL')) {
-            $url = $this->systemConfigService->get('JovepayPlugin.config.DebugPostURL');
+        if (!(bool) $this->systemConfigService->get('JovepayPlugin.config.DebugPost')) {
+            return false;
+        }
 
-            $request = new Request(
+        $url = (string) $this->systemConfigService->get('JovepayPlugin.config.DebugPostURL');
+        if ($url === '') {
+            return false;
+        }
+
+        $client = $this->getRestClient();
+        if ($client === null) {
+            return false;
+        }
+
+        try {
+            $requestClass = 'GuzzleHttp\\Psr7\\Request';
+            $request = new $requestClass(
                 'POST',
                 $url,
                 ['Content-Type' => 'application/json'],
                 json_encode(['_DebuglogOrigin' => $origin, 'data' => json_encode($data)])
             );
-
-            $response = $this->restClient->send($request);
+            $client->send($request);
+        } catch (\Throwable $e) {
+            return false;
         }
+
         return false;
     }
 
     /**
-     * @return Bool
+     * @return bool
      */
     public function forwardCopy(string $origin, $request)
     {
-        if (((bool) $this->systemConfigService->get('JovepayPlugin.config.DebugPost')) && $this->systemConfigService->get('JovepayPlugin.config.DebugPostURL')) {
+        if (!(bool) $this->systemConfigService->get('JovepayPlugin.config.DebugPost')) {
+            return false;
+        }
+
+        $url = (string) $this->systemConfigService->get('JovepayPlugin.config.DebugPostURL');
+        if ($url === '') {
+            return false;
+        }
+
+        $client = $this->getRestClient();
+        if ($client === null) {
+            return false;
+        }
+
+        try {
             $queryBag = $request->query;
             $requestBag = $request->request;
-
-            $requestGuzz = new Request(
+            $requestClass = 'GuzzleHttp\\Psr7\\Request';
+            $requestGuzz = new $requestClass(
                 'POST',
-                $this->systemConfigService->get('JovepayPlugin.config.DebugPostURL'),
+                $url,
                 ['Content-Type' => 'application/json'],
-                json_encode(array_replace(['_DebuglogOrigin' => $origin], ['getperm' => $queryBag->all(), 'postperm' => $requestBag->all()], ['Body' => $request->getContent(), 'server' => $request->server->all()]))
+                json_encode(array_replace(
+                    ['_DebuglogOrigin' => $origin],
+                    ['getperm' => $queryBag->all(), 'postperm' => $requestBag->all()],
+                    ['Body' => $request->getContent(), 'server' => $request->server->all()]
+                ))
             );
-
-            $response = $this->restClient->send($requestGuzz);
+            $client->send($requestGuzz);
+        } catch (\Throwable $e) {
+            return false;
         }
+
         return false;
+    }
+
+    /**
+     * @return object|null
+     */
+    private function getRestClient()
+    {
+        if ($this->restClient !== null) {
+            return $this->restClient;
+        }
+
+        if (!class_exists('GuzzleHttp\\Client')) {
+            return null;
+        }
+
+        $clientClass = 'GuzzleHttp\\Client';
+        $this->restClient = new $clientClass();
+
+        return $this->restClient;
     }
 }

@@ -1,0 +1,65 @@
+/* JOVEpay checkout payment icons — logo before label, overlapping coin stack after */
+.jovepay-payment-method-label {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.jovepay-payment-method-label__text {
+    flex: 0 1 auto;
+}
+
+.jovepay-payment-icons {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    line-height: 1;
+    margin-inline-start: auto;
+}
+
+.jovepay-payment-icons__logo {
+    display: block;
+    width: auto;
+    height: 1.75rem;
+    max-height: 28px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.jovepay-payment-icons__stack {
+    display: inline-flex;
+    align-items: center;
+    flex-direction: row;
+}
+
+.jovepay-payment-icons__coin {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-inline-start: -0.45rem;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08);
+    object-fit: cover;
+    background: #fff;
+    position: relative;
+}
+
+.jovepay-payment-icons__stack .jovepay-payment-icons__coin:first-child {
+    margin-inline-start: 0;
+}
+
+.payment-method-label:has(.jovepay-payment-method-label) {
+    align-items: center;
+    width: 100%;
+}
+
+@media (prefers-color-scheme: dark) {
+    .jovepay-payment-icons__coin {
+        border-color: #1e1e1e;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+    }
+}

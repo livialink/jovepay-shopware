@@ -4,31 +4,33 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <!-- 1. Payment Handler Service -->
+        <!-- Payment Handler Service -->
         <service id="JovepayPlugin\Service\Jovepay">
             <argument type="service" id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"/>
             <argument type="service" id="currency.repository"/>
             <argument type="service" id="order.repository"/>
+            <argument type="service" id="order_transaction.repository"/>
             <argument type="service" id="router.default"/>
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
             <argument type="service" id="JovepayPlugin\Util\DebugLog" />
-            <tag name="shopware.payment.method.async" />
+            <!-- Single tag used by Shopware 6.6.5+ / 6.7; older releases still accept it -->
             <tag name="shopware.payment.method" />
+            <!-- Legacy async tag for Shopware &lt; 6.6.5 -->
+            <tag name="shopware.payment.method.async" />
         </service>
 
-        <!-- 2. Controller Service -->
+        <!-- Controller Service -->
         <service id="JovepayPlugin\Storefront\Controller\CallbackController" public="true">
             <argument type="service" id="JovepayPlugin\Util\DebugLog" />
             <argument type="service" id="order_transaction.repository"/>
             <argument type="service" id="Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler"/>
-            <!-- Added required tag for controllers -->
             <tag name="controller.service_arguments" />
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
         </service>
 
-        <!-- 3. Utility Service -->
+        <!-- Utility Service -->
         <service id="JovepayPlugin\Util\DebugLog" public="true">
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
         </service>

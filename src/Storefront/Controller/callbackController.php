@@ -13,19 +13,19 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 
 /**
+ * Annotation routes are required for Shopware 6.4.x, which expects a RouteScope
+ * object on the request (with getScopes()), not a string/array default.
+ *
  * @RouteScope(scopes={"storefront"})
  */
 class CallbackController extends StorefrontController
 {
     private DebugLog $debugLog;
 
-    /**
-     * @var object
-     */
-    private EntityRepository $orderTransactionRepository;
+    /** @var object */
+    private $orderTransactionRepository;
 
     private OrderTransactionStateHandler $transactionStateHandler;
 
@@ -38,7 +38,7 @@ class CallbackController extends StorefrontController
 
     public function __construct(
         DebugLog $debugLog,
-        EntityRepository $orderTransactionRepository,
+        $orderTransactionRepository,
         OrderTransactionStateHandler $transactionStateHandler
     ) {
         $this->debugLog = $debugLog;
@@ -115,6 +115,7 @@ class CallbackController extends StorefrontController
                 }
             }
         }
+
         return $this->renderStorefront('@JovepayPlugin/callback/index.html.twig', $requestqueryaRRAY);
     }
 
@@ -220,7 +221,7 @@ class CallbackController extends StorefrontController
                 }
 
                 if ($oStartus === 'in_progress') {
-                    if ($paymentState === 'finished' || $paymentState === 'sending') {
+                    if ($paymentState === 'finished' || $paymentState === 'confirmed') {
                         if ($this->validatePayment((string) ($response['purchase_id'] ?? ''), $paymentState)) {
                             $this->transactionStateHandler->paid($requestqueryaRRAY['_sw_order'], $context);
                         }

@@ -6,22 +6,30 @@ use JovepayPlugin\Service\Jovepay;
 use Shopware\Core\Content\Media\File\FileSaver;
 use Shopware\Core\Content\Media\File\MediaFile;
 use Shopware\Core\Framework\Api\Context\SystemSource;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Shopware\Core\Framework\Plugin;
 use Shopware\Core\Framework\Plugin\Context\ActivateContext;
 use Shopware\Core\Framework\Plugin\Context\DeactivateContext;
 use Shopware\Core\Framework\Plugin\Context\InstallContext;
 use Shopware\Core\Framework\Plugin\Context\UninstallContext;
+use Shopware\Core\Framework\Plugin\Context\UpdateContext;
 use Shopware\Core\Framework\Plugin\Util\PluginIdProvider;
 use Shopware\Core\Framework\Uuid\Uuid;
-use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\Plugin;
 
 class JovepayPlugin extends Plugin
 {
     public function install(InstallContext $context): void
     {
         $this->addPaymentMethod($context->getContext());
+        $this->enablePaymentMethodForAllSalesChannels($context->getContext());
+    }
+
+    public function update(UpdateContext $context): void
+    {
+        $this->addPaymentMethod($context->getContext());
+        $this->enablePaymentMethodForAllSalesChannels($context->getContext());
     }
 
     public function uninstall(UninstallContext $context): void
@@ -33,7 +41,9 @@ class JovepayPlugin extends Plugin
 
     public function activate(ActivateContext $context): void
     {
+        $this->addPaymentMethod($context->getContext());
         $this->setPaymentMethodIsActive(true, $context->getContext());
+        $this->enablePaymentMethodForAllSalesChannels($context->getContext());
         parent::activate($context);
     }
 
@@ -45,10 +55,7 @@ class JovepayPlugin extends Plugin
 
     private function addPaymentMethod(Context $context): void
     {
-        $paymentMethodExists = $this->getPaymentMethodId();
-
-        // Payment method exists already, no need to continue here
-        if ($paymentMethodExists) {
+        if ($this->getPaymentMethodId()) {
             return;
         }
 
@@ -59,18 +66,47 @@ class JovepayPlugin extends Plugin
         // technicalName is a write-protected field requiring system scope in Shopware 6.5+
         $systemContext = new Context(new SystemSource());
 
-        $JovepayMethodData = [
+        $jovepayMethodData = [
             'handlerIdentifier' => Jovepay::class,
-            'name' => 'JOVEpay (pay with crypto)',
+            'name' => 'JOVEpay Crypto Payments',
             'description' => 'Pay in 100+ cryptocurrencies with JOVEpay',
-            'technicalName' => 'jovepay',
+            'technicalName' => 'payment_jovepay_jovepay',
             'pluginId' => $pluginId,
             'position' => 1,
+            'active' => false,
+            'afterOrderEnabled' => true,
             'mediaId' => $this->createPaymentLogo($systemContext),
         ];
 
         $paymentRepository = $this->container->get('payment_method.repository');
-        $paymentRepository->create([$JovepayMethodData], $systemContext);
+        $paymentRepository->create([$jovepayMethodData], $systemContext);
+    }
+
+    private function enablePaymentMethodForAllSalesChannels(Context $context): void
+    {
+        $paymentMethodId = $this->getPaymentMethodId();
+        if (!$paymentMethodId) {
+            return;
+        }
+
+        $salesChannelRepository = $this->container->get('sales_channel.repository');
+        $salesChannelIds = $salesChannelRepository->searchIds(new Criteria(), $context)->getIds();
+
+        if ($salesChannelIds === []) {
+            return;
+        }
+
+        $paymentMethodSalesChannelRepository = $this->container->get('sales_channel_payment_method.repository');
+
+        $payload = [];
+        foreach ($salesChannelIds as $salesChannelId) {
+            $payload[] = [
+                'salesChannelId' => $salesChannelId,
+                'paymentMethodId' => $paymentMethodId,
+            ];
+        }
+
+        $paymentMethodSalesChannelRepository->upsert($payload, $context);
     }
 
     private function createPaymentLogo(Context $context): string
@@ -83,25 +119,25 @@ class JovepayPlugin extends Plugin
             [
                 'id' => $mediaId,
                 'name' => 'jovepay-payment-logo',
-                'mimeType' => 'image/png',
-                'fileExtension' => 'png',
+                'mimeType' => 'image/svg+xml',
+                'fileExtension' => 'svg',
             ]
         ], $context);
 
         /** @var FileSaver $fileSaver */
         $fileSaver = $this->container->get(FileSaver::class);
 
-        $filePath = __DIR__ . '/Resources/public/jovepay.png';
+        $filePath = __DIR__ . '/Resources/public/logo.svg';
 
         $mediaFile = new MediaFile(
             $filePath,
-            'image/png',
-            'png',
+            'image/svg+xml',
+            'svg',
             filesize($filePath)
         );
         $fileSaver->persistFileToMedia(
             $mediaFile,
-            'jovepay.png',
+            'logo.svg',
             $mediaId,
             $context
         );
@@ -135,10 +171,6 @@ class JovepayPlugin extends Plugin
         $paymentCriteria = (new Criteria())->addFilter(new EqualsFilter('handlerIdentifier', Jovepay::class));
         $paymentIds = $paymentRepository->searchIds($paymentCriteria, Context::createDefaultContext());
 
-        if ($paymentIds->getTotal() === 0) {
-            return null;
-        }
-
-        return $paymentIds->getIds()[0];
+        return $paymentIds->firstId();
     }
 }
