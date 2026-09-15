@@ -1,12 +1,10 @@
 {% sw_extends '@Storefront/storefront/base.html.twig' %}
 
 {% block base_body_inner %}
-
-
+<div class="jovepay-callback">
   {% if paymentStatus == 'cancelled' or paymentStatus == 'failed' or paymentStatus == 'refunded' or paymentStatus == 'expired' %}
-    <h2 style=" text-align: center;">
-      <svg width="199" height="199" xmlns="http://www.w3.org/2000/svg">
-        <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+    <h2 class="jovepay-callback__heading">
+      <svg class="jovepay-callback__icon" width="199" height="199" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <g>
           <title>background</title>
           <rect fill="none" id="canvas_background" height="201" width="201" y="-1" x="-1"/>
@@ -28,62 +26,38 @@
         </g>
       </svg>
     </h2>
-    <h2 style=" text-align: center;">
-      payment failed
-    </h2>
-    <p style="text-align: center;">{{ message | raw }}
-    </p>
-
-    <p class="revocation-notice" style=" text-align: center;">Curent order Status is :
-      {{ paymentStatus }}</p>
+    <h2 class="jovepay-callback__heading">payment failed</h2>
+    <p class="jovepay-callback__text">{{ message | raw }}</p>
+    <p class="jovepay-callback__status">Current order status is: {{ paymentStatus }}</p>
   {% else %}
-    {# <script>
-      window.onload = function () {
-        if (!window.location.hash) {
-          window.location = window.location + '#loaded';
-          window.location.reload();
-        }
-        setTimeout(function () {
-          window.location.reload();
-        }, 3000);
-      }
-    </script> #}
-        <script>
-
+    <script>
       function CheckStatus() {
-         
-        // Sending and receiving data in JSON format using POST method
         var xhr = new XMLHttpRequest();
         var url = "{{ path('frontend.checkout.jovepay.process.check') }}";
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status === 200) {
-           
             var ps1 = JSON.parse(xhr.responseText).payment_status;
             var ps2 = JSON.parse(data).paymentStatus;
-            if(ps1!=ps2){
-          console.log('Status_changed');
-          window.location.reload();
-          }
+            if (ps1 != ps2) {
+              window.location.reload();
+            }
           }
         };
         var data = JSON.stringify({"_sw_order": "{{ _sw_order }}", "paymentStatus": "{{ paymentStatus }}"});
-        //console.log(data._sw_order + ", " + data.paymentStatus);
         xhr.send(data);
       }
 
       window.onload = function () {
-        setInterval(function() { 
-                CheckStatus()
-            }, 3000);
-     
-      }
+        setInterval(function () {
+          CheckStatus();
+        }, 3000);
+      };
     </script>
     {% if paymentStatus == 'completed' or paymentStatus == 'paid' %}
-      <h2 style=" text-align: center;">
-        <svg width="199" height="199" xmlns="http://www.w3.org/2000/svg">
-          <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+      <h2 class="jovepay-callback__heading">
+        <svg class="jovepay-callback__icon" width="199" height="199" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <g>
             <title>background</title>
             <rect fill="none" id="canvas_background" height="201" width="201" y="-1" x="-1"/>
@@ -99,25 +73,22 @@
           </g>
         </svg>
       </h2>
-      <p class="revocation-notice" style=" text-align: center;">please wait redirecting.</p>
-
-    {% elseif paymentStatus == 'in_progress'   %}
-      <h2 style=" text-align: center;">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#fff;display:block;" width="200px" height="200px" viewbox="0 0 100 100" preserveaspectratio="xMidYMid">
+      <p class="jovepay-callback__status">Please wait, redirecting.</p>
+    {% elseif paymentStatus == 'in_progress' %}
+      <h2 class="jovepay-callback__heading">
+        <svg class="jovepay-callback__icon jovepay-callback__icon--spinner" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" aria-hidden="true">
           <circle cx="50" cy="50" r="39" stroke="#e0e0e0" stroke-width="16" fill="none"></circle>
           <circle cx="50" cy="50" r="39" stroke="#bebebe" stroke-width="11" stroke-linecap="round" fill="none">
-            <animatetransform attributename="transform" type="rotate" repeatcount="indefinite" dur="2.272727272727273s" values="0 50 50;180 50 50;720 50 50" keytimes="0;0.5;1"></animatetransform>
-            <animate attributename="stroke-dasharray" repeatcount="indefinite" dur="2.272727272727273s" values="24.504422698000386 220.53980428200347;122.52211349000193 122.52211349000193;24.504422698000386 220.53980428200347" keytimes="0;0.5;1"></animate>
+            <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="2.272727272727273s" values="0 50 50;180 50 50;720 50 50" keyTimes="0;0.5;1"></animateTransform>
+            <animate attributeName="stroke-dasharray" repeatCount="indefinite" dur="2.272727272727273s" values="24.504422698000386 220.53980428200347;122.52211349000193 122.52211349000193;24.504422698000386 220.53980428200347" keyTimes="0;0.5;1"></animate>
           </circle>
         </svg>
       </h2>
-      <p class="revocation-notice" style=" text-align: center;">Please wait we are confirming your order.</p>
-      <p class="revocation-notice" style=" text-align: center;">please wait redirecting.</p>
+      <p class="jovepay-callback__status">Please wait, we are confirming your order.</p>
+      <p class="jovepay-callback__status">Please wait, redirecting.</p>
     {% else %}
-      <h2 style=" text-align: center;">
-        <svg width="199" height="199" xmlns="http://www.w3.org/2000/svg">
-          <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
-
+      <h2 class="jovepay-callback__heading">
+        <svg class="jovepay-callback__icon" width="199" height="199" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <g>
             <title>background</title>
             <rect x="-1" y="-1" width="201" height="201" id="canvas_background" fill="none"/>
@@ -130,10 +101,9 @@
           </g>
         </svg>
       </h2>
-      <p class="revocation-notice" style=" text-align: center;">your order Status is :
-        {{ paymentStatus }}</p>
-      <p class="revocation-notice" style=" text-align: center;">There has been a techinical problem confirming your order.</p>
+      <p class="jovepay-callback__status">Your order status is: {{ paymentStatus }}</p>
+      <p class="jovepay-callback__status">There has been a technical problem confirming your order.</p>
     {% endif %}
   {% endif %}
-
+</div>
 {% endblock %}

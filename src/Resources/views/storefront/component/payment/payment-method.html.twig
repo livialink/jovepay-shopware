@@ -1,14 +1,9 @@
 {% sw_extends '@Storefront/storefront/component/payment/payment-method.html.twig' %}
 
-{#
-  JOVEpay storefront row: logo | title | overlapping coin stack
-#}
 {% set isJovepayPayment = payment.handlerIdentifier is same as('JovepayPlugin\\Service\\Jovepay') %}
 
 {% block component_payment_method_image %}
-    {% if isJovepayPayment %}
-        {# Logo is rendered next to the title; skip default media thumbnail. #}
-    {% else %}
+    {% if not isJovepayPayment %}
         {{ parent() }}
     {% endif %}
 {% endblock %}
@@ -23,22 +18,11 @@
             { id: 'bnb', file: 'bnb.png', alt: 'BNB' }
         ] %}
 
-        <style>
-            .jovepay-payment-method-label{display:inline-flex;align-items:center;flex-wrap:wrap;gap:.5rem;vertical-align:middle;width:100%}
-            .jovepay-payment-method-label__text{flex:0 1 auto}
-            .jovepay-payment-icons{display:inline-flex;align-items:center;line-height:1;margin-inline-start:auto}
-            .jovepay-payment-icons__logo{display:block;width:auto;height:1.75rem;max-height:28px;object-fit:contain;flex-shrink:0}
-            .jovepay-payment-icons__stack{display:inline-flex;align-items:center;flex-direction:row}
-            .jovepay-payment-icons__coin{display:block;width:1.5rem;height:1.5rem;margin-inline-start:-.45rem;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(15,23,42,.08);object-fit:cover;background:#fff;position:relative}
-            .jovepay-payment-icons__stack .jovepay-payment-icons__coin:first-child{margin-inline-start:0}
-            .payment-method-label:has(.jovepay-payment-method-label){align-items:center;width:100%}
-        </style>
-
         <span class="jovepay-payment-method-label">
             <img
                 class="jovepay-payment-icons__logo"
-                src="{{ asset(jovepayAssetBase ~ '/logo.svg') }}"
-                alt=""
+                src="{{ asset(jovepayAssetBase ~ '/jovepay-logo.svg') }}"
+                alt="JOVEpay"
                 width="28"
                 height="28"
             >
@@ -52,7 +36,6 @@
                             alt="{{ coin.alt }}"
                             width="24"
                             height="24"
-                            style="z-index: {{ jovepayCoins|length - loop.index0 }}"
                         >
                     {% endfor %}
                 </span>

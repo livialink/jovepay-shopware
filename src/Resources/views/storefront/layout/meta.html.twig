@@ -1,0 +1,6 @@
+{% sw_extends '@Storefront/storefront/layout/meta.html.twig' %}
+
+{% block layout_head_stylesheet %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/jovepayplugin/checkout-icons.css') }}">
+{% endblock %}

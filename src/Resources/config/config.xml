@@ -1,95 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
 
     <card>
-        <title lang="en-US">JOVEpay Gateway configuration</title>
-        <title lang="de-DE">JOVEpay Gateway Configuration</title>
+        <title>JOVEpay configuration</title>
+        <title lang="de-DE">JOVEpay Konfiguration</title>
+
         <input-field type="bool">
             <name>isTestnet</name>
-            <label>Is Testnet?</label>
-            <label lang="de-DE">Ist Testnet?</label>
-            <helpText>Enable Testnet mode</helpText>
-            <helpText lang="de-DE">Enable Testnet Mode</helpText>
+            <label>Testnet mode</label>
+            <label lang="de-DE">Testnet-Modus</label>
+            <helpText>Enable JOVEpay testnet for sandbox payments.</helpText>
+            <helpText lang="de-DE">Aktiviert den JOVEpay-Testnet für Sandbox-Zahlungen.</helpText>
             <defaultValue>true</defaultValue>
-            <disabled>false</disabled>
         </input-field>
+
         <input-field type="bool">
             <name>isDark</name>
-            <label>Is Dark Theme?</label>
-            <label lang="de-DE">Ist Dark Theme?</label>
-            <helpText>Enable Dark Theme</helpText>
-            <helpText lang="de-DE">Enable Dark Theme</helpText>
+            <label>Dark payment theme</label>
+            <label lang="de-DE">Dunkles Zahlungsthema</label>
+            <helpText>Open the JOVEpay checkout page with the dark theme.</helpText>
+            <helpText lang="de-DE">Öffnet die JOVEpay-Checkout-Seite im dunklen Theme.</helpText>
             <defaultValue>true</defaultValue>
-            <disabled>false</disabled>
         </input-field>
+
         <input-field type="text">
             <name>apiUrl</name>
             <label>API URL</label>
-            <placeholder>Please enter your jovepay.com API URL</placeholder>
-            <helpText>Please enter your jovepay.com API URL</helpText>
+            <label lang="de-DE">API-URL</label>
+            <helpText>JOVEpay payment endpoint URL.</helpText>
+            <helpText lang="de-DE">URL des JOVEpay-Zahlungsendpunkts.</helpText>
             <defaultValue>https://www.jovepay.com/pay/payment</defaultValue>
             <disabled>true</disabled>
         </input-field>
-        <input-field type="text">
+
+        <input-field type="password">
             <name>apiKey</name>
-            <label>API Key</label>
-            <placeholder>XXXXXXX-XXXXXXX-XXXXXXX-XXXXXXX</placeholder>
-            <helpText>Please enter your jovepay.com Api Key.</helpText>
-            <defaultValue>test_api_key</defaultValue>
-            <!-- <disabled>true</disabled> -->
+            <label>API key</label>
+            <label lang="de-DE">API-Schlüssel</label>
+            <placeholder>Your JOVEpay API key</placeholder>
+            <helpText>Enter the API key from your JOVEpay merchant account.</helpText>
+            <helpText lang="de-DE">Geben Sie den API-Schlüssel aus Ihrem JOVEpay-Händlerkonto ein.</helpText>
         </input-field>
-        <input-field type="text">
+
+        <input-field type="password">
             <name>IPNSecret</name>
-            <label>IPN Secret</label>
-            <placeholder>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</placeholder>
-            <helpText>Please enter your jovepay.com IPN Secret.</helpText>
-            <defaultValue>test_ipn_secret</defaultValue>
-            <!-- <disabled>true</disabled> -->
+            <label>IPN secret</label>
+            <label lang="de-DE">IPN-Geheimnis</label>
+            <placeholder>Your JOVEpay IPN secret</placeholder>
+            <helpText>Enter the IPN secret from your JOVEpay merchant account.</helpText>
+            <helpText lang="de-DE">Geben Sie das IPN-Geheimnis aus Ihrem JOVEpay-Händlerkonto ein.</helpText>
         </input-field>
     </card>
 
     <card>
-        <title lang="en-US">Data </title>
-        <title lang="de-DE">Data </title>
+        <title>Data transmission</title>
+        <title lang="de-DE">Datenübertragung</title>
+
         <input-field type="bool">
             <name>transmitCustomerData</name>
             <label>Transmit customer data</label>
-            <label lang="de-DE">Transmit customer data</label>
-            <helpText>Transmit customer data</helpText>
-            <helpText lang="de-DE">Transmit customer data</helpText>
+            <label lang="de-DE">Kundendaten übertragen</label>
+            <helpText>Send customer name and email to JOVEpay with the payment request.</helpText>
+            <helpText lang="de-DE">Sendet Kundenname und E-Mail mit der Zahlungsanfrage an JOVEpay.</helpText>
             <defaultValue>true</defaultValue>
-            <!-- <disabled>true</disabled> -->
         </input-field>
+
         <input-field type="bool">
             <name>transmitProductData</name>
-            <label>Transmit Product data</label>
-            <label lang="de-DE">Transmit Product data</label>
-            <helpText>Transmit Product data</helpText>
-            <helpText lang="de-DE">Transmit Product data</helpText>
+            <label>Transmit product data</label>
+            <label lang="de-DE">Produktdaten übertragen</label>
+            <helpText>Send line-item product details to JOVEpay with the payment request.</helpText>
+            <helpText lang="de-DE">Sendet Positionsdaten der Produkte mit der Zahlungsanfrage an JOVEpay.</helpText>
             <defaultValue>true</defaultValue>
-            <!-- <disabled>TRUE</disabled> -->
         </input-field>
     </card>
 
     <card>
-        <title lang="en-US">Debug</title>
-        <title lang="de-DE">Debug</title>
+        <title>Logging</title>
+        <title lang="de-DE">Protokollierung</title>
+
         <input-field type="bool">
-            <name>DebugPost</name>
-            <label>Enable Debuging</label>
-            <label lang="de-DE">Enable Debuging</label>
-            <helpText>Enable Debuging</helpText>
-            <helpText lang="de-DE">Enable Debuging</helpText>
-            <disabled>false</disabled>
-        </input-field>
-        <input-field type="text">
-            <name>DebugPostURL</name>
-            <label>Debug Post URL</label>
-            <placeholder>Please enter URL to send post request to debug.</placeholder>
-            <helpText>Please enter URL to send post request to debug.</helpText>
-            <defaultValue>test_debug_post_url</defaultValue>
+            <name>debugLogging</name>
+            <label>Enable debug logging</label>
+            <label lang="de-DE">Debug-Protokollierung aktivieren</label>
+            <helpText>Write detailed JOVEpay payment logs to var/log (JovepayPlugin-YYYY-MM-DD.log).</helpText>
+            <helpText lang="de-DE">Schreibt detaillierte JOVEpay-Zahlungslogs nach var/log (JovepayPlugin-JJJJ-MM-TT.log).</helpText>
+            <defaultValue>false</defaultValue>
         </input-field>
     </card>
-
-
 </config>

@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/symfony/dependency-injection/7.4/Loader/schema/services.schema.json
+services:
+    jovepay.logger:
+        class: Monolog\Logger
+        factory: ['JovepayPlugin\Util\PluginLoggerFactory', create]
+        arguments:
+            - '%kernel.logs_dir%'
+            - JovepayPlugin
+
+    JovepayPlugin\Util\PaymentLogger:
+        arguments:
+            - '@Shopware\Core\System\SystemConfig\SystemConfigService'
+            - '@jovepay.logger'
+
+    JovepayPlugin\Service\Jovepay:
+        arguments:
+            - '@Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler'
+            - '@currency.repository'
+            - '@order_transaction.repository'
+            - '@router.default'
+            - '@Shopware\Core\System\SystemConfig\SystemConfigService'
+            - '@JovepayPlugin\Util\PaymentLogger'
+        tags:
+            - shopware.payment.method
+            - shopware.payment.method.async
+
+    JovepayPlugin\Storefront\Controller\CallbackController:
+        public: true
+        arguments:
+            - '@JovepayPlugin\Util\PaymentLogger'
+            - '@order_transaction.repository'
+            - '@Shopware\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler'
+        calls:
+            - [setContainer, ['@service_container']]
+        tags:
+            - controller.service_arguments
+
+    JovepayPlugin\Subscriber\RouteScopeCompatSubscriber:
+        class: JovepayPlugin\Subscriber\RouteScopeCompatSubscriber
+        public: true
+        tags:
+            - { name: kernel.event_subscriber }

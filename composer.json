@@ -1,34 +1,47 @@
 {
-  "name": "jovepay/payment-jovepayplugin",
-  "description": "Accept USDT, USDC, ETH, BNB, LTC and many more: pay with anything you like!",
-  "version": "v1.0.0",
+  "name": "jovepay/jovepay-shopware",
+  "description": "Accept crypto payments across 13 blockchain networks and settle instantly to your wallet.",
+  "version": "1.0.0",
   "type": "shopware-platform-plugin",
   "license": "MIT",
+  "authors": [
+    {
+      "name": "JOVEpay",
+      "email": "dev@jovepay.com",
+      "homepage": "https://www.jovepay.com",
+      "role": "Manufacturer"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "shopware/core": "~6.2.0 || ~6.3.0 || ~6.4.0 || ~6.5.0 || ~6.6.0 || ~6.7.0",
+    "shopware/storefront": "~6.2.0 || ~6.3.0 || ~6.4.0 || ~6.5.0 || ~6.6.0 || ~6.7.0"
+  },
   "autoload": {
+    "files": [
+      "src/Compatibility/polyfill.php"
+    ],
     "psr-4": {
       "JovepayPlugin\\": "src/"
     }
   },
-  "authors": [
-    {
-      "name": "jovepay",
-      "email": "dev@jovepay.com",
-      "homepage": "https://www.jovepay.com",
-      "role": "Developer"
-    }
-  ],
-  "require": {
-    "shopware/core": "*"
-  },
   "extra": {
     "shopware-plugin-class": "JovepayPlugin\\JovepayPlugin",
     "label": {
-      "de-DE": "JOVEpay Crypto Payments",
-      "en-GB": "JOVEpay Crypto Payments"
+      "en-GB": "JOVEpay Crypto Payments",
+      "de-DE": "JOVEpay Krypto-Zahlungen"
     },
     "description": {
-      "en-GB": "Accept crypto payments across 13 blockchain networks and settle instantly, directly to your wallet. 0.5% flat service fee, 24/7 support, REST API and CMS plugins.",
-      "de-DE": "x breid uw betalingsmogelijkheden uit met JOVEpay! USDT, USDC, ETH, BNB, LTC en nog veel meer: betaal met alles wat je maar wilt!"
+      "en-GB": "Accept crypto payments across 13 blockchain networks and settle instantly to your wallet. Flat 0.5% fee with checkout support for USDT, ETH, BTC, BNB and more.",
+      "de-DE": "Akzeptieren Sie Krypto-Zahlungen über 13 Blockchain-Netzwerke und erhalten Sie Beträge sofort auf Ihr Wallet. 0,5% Gebühr für USDT, ETH, BTC, BNB und mehr."
+    },
+    "manufacturerLink": {
+      "en-GB": "https://www.jovepay.com",
+      "de-DE": "https://www.jovepay.com"
+    },
+    "supportLink": {
+      "en-GB": "https://www.jovepay.com",
+      "de-DE": "https://www.jovepay.com"
     }
   }
 }

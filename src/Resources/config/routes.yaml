@@ -1,0 +1,36 @@
+# Cross-version routes.
+# `_routeScope` is declared as an array (Shopware 6.5+). On Shopware 6.2–6.4.10,
+# RouteScopeCompatSubscriber converts it to a RouteScope object before the core check.
+
+frontend.checkout.jovepay.error:
+    path: /checkout/jovepay/error
+    controller: JovepayPlugin\Storefront\Controller\CallbackController::error
+    methods: [GET, POST]
+    defaults:
+        csrf_protected: false
+        _routeScope: [storefront]
+
+frontend.checkout.jovepay.process:
+    path: /checkout/jovepay/process
+    controller: JovepayPlugin\Storefront\Controller\CallbackController::process
+    methods: [GET, POST]
+    defaults:
+        csrf_protected: false
+        _routeScope: [storefront]
+
+frontend.checkout.jovepay.process.check:
+    path: /checkout/jovepay/process/check
+    controller: JovepayPlugin\Storefront\Controller\CallbackController::processCheck
+    methods: [POST]
+    defaults:
+        csrf_protected: false
+        _routeScope: [storefront]
+
+frontend.checkout.jovepay.callback:
+    path: /checkout/jovepay/callback
+    controller: JovepayPlugin\Storefront\Controller\CallbackController::finalizeTransaction
+    methods: [GET, POST]
+    defaults:
+        auth_required: false
+        csrf_protected: false
+        _routeScope: [storefront]
